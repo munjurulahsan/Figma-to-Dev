@@ -8,9 +8,10 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { onPreloaderDone } from "@/lib/scroll";
 
 /**
  * Hero — full-bleed editorial redesign: a cutout model portrait anchored to
@@ -68,6 +69,11 @@ export function Hero() {
     useHeroMotion(sectionRef);
 
   const reduce = !!prefersReducedMotion;
+
+  // Hold the entrance until the preloader curtain lifts, otherwise it plays unseen underneath.
+  const [entered, setEntered] = useState(false);
+  useEffect(() => onPreloaderDone(() => setEntered(true)), []);
+  const enter = <T,>(target: T) => (entered ? target : undefined);
   const range = (v: number) => (interactive ? [-v, v] : [0, 0]);
 
   // Mouse parallax for the portrait; text drifts a touch less on scroll.
@@ -138,7 +144,7 @@ export function Hero() {
       id="hero"
       ref={sectionRef}
       data-name="Hero — Full Bleed Editorial Portrait"
-      className="relative min-h-[820px] w-full overflow-hidden bg-surface-1 lg:min-h-screen"
+      className="relative min-h-[max(640px,100svh)] w-full overflow-hidden bg-surface-1"
     >
       {/* Large circular/orange blob background shape — slow rotate + scale with scroll */}
       <div
@@ -159,23 +165,25 @@ export function Hero() {
 
       {/* Full-bleed cinematic backdrop video with subtle parallax */}
       <motion.div
-        ref={videoWrapRef}
         initial={reduce ? { opacity: 1 } : { opacity: 0, scale: 1.04 }}
-        animate={{ opacity: 1, scale: 1 }}
+        animate={enter({ opacity: 1, scale: 1 })}
         transition={{ duration: 1.6, delay: T.image, ease: EASE_CINEMATIC }}
         className="absolute inset-0 z-0 size-full will-change-transform"
       >
-        <motion.div style={{ x: imageX, y: imageY }} className="relative size-full">
-          <video
-            src="/images/hero-video.mp4"
-            aria-label="Model in the Vector Over-Armor Shell jacket, Runway 01 Look 14"
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 size-full object-cover object-[70%_20%]"
-          />
-        </motion.div>
+        {/* GSAP owns this wrapper's transform; Framer owns the ones around and inside it. */}
+        <div ref={videoWrapRef} className="size-full will-change-transform">
+          <motion.div style={{ x: imageX, y: imageY }} className="relative size-full">
+            <video
+              src="/images/hero-video.mp4"
+              aria-label="Model in the Vector Over-Armor Shell jacket, Runway 01 Look 14"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 size-full object-cover object-[70%_20%]"
+            />
+          </motion.div>
+        </div>
       </motion.div>
 
       {/* Legibility scrim so the headline stays readable over the video */}
@@ -188,11 +196,11 @@ export function Hero() {
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-40 bg-gradient-to-t from-surface-1 to-transparent lg:hidden"
       />
 
-      <div className="relative z-10 mx-auto flex min-h-[820px] w-full max-w-[1440px] flex-col px-6 pb-8 pt-[104px] lg:min-h-screen lg:px-16 lg:pb-10 lg:pt-[120px]">
+      <div className="relative z-10 mx-auto flex min-h-[max(640px,100svh)] w-full max-w-[1440px] flex-col px-6 pb-8 pt-[104px] md:px-16 lg:pb-10 lg:pt-[120px]">
         {/* Header Meta Row */}
         <motion.div
           initial={reduce ? { opacity: 1 } : { opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={enter({ opacity: 1, y: 0 })}
           transition={{ duration: 0.8, delay: T.metadata, ease: EASE_CINEMATIC }}
           className="flex w-full items-start justify-between gap-4 pt-2"
         >
@@ -236,7 +244,7 @@ export function Hero() {
               >
                 <motion.span
                   initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: "115%" }}
-                  animate={{ opacity: 1, y: "0%" }}
+                  animate={enter({ opacity: 1, y: "0%" })}
                   transition={{
                     duration: 0.95,
                     delay: line.delay,
@@ -257,7 +265,7 @@ export function Hero() {
           <div className="w-full max-w-[480px] overflow-hidden pb-10">
             <motion.p
               initial={reduce ? { opacity: 1 } : { opacity: 0, y: "40%" }}
-              animate={{ opacity: 1, y: "0%" }}
+              animate={enter({ opacity: 1, y: "0%" })}
               transition={{ duration: 0.8, delay: T.description, ease: EASE_CINEMATIC }}
               className="font-body text-[18px] font-light leading-[28px] tracking-[-0.18px] text-ink-200"
             >
@@ -268,7 +276,7 @@ export function Hero() {
 
           <motion.div
             initial={reduce ? { opacity: 1 } : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={enter({ opacity: 1, y: 0 })}
             transition={{ duration: 0.75, delay: T.cta, ease: EASE_CINEMATIC }}
             className="flex w-full flex-wrap items-center gap-4"
           >
@@ -305,7 +313,7 @@ export function Hero() {
         {/* Bottom Action Ribbon */}
         <motion.div
           initial={reduce ? { opacity: 1 } : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={enter({ opacity: 1, y: 0 })}
           transition={{ duration: 0.8, delay: T.ribbon, ease: EASE_CINEMATIC }}
           className="flex w-full items-center justify-between gap-4 pt-4"
         >

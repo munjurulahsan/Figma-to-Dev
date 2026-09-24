@@ -43,7 +43,7 @@ export function MaterialCraftsmanship() {
               Material Matrix
             </span>
           </div>
-          <h2 className="mb-2 font-display font-semibold uppercase leading-[42px] tracking-[-0.72px] text-[clamp(1.75rem,4vw,2.25rem)] text-ink-100">
+          <h2 className="mb-2 font-display font-semibold uppercase leading-[1.17] tracking-[-0.72px] text-[clamp(1.75rem,4vw,2.25rem)] text-ink-100">
             Detail Is the Difference
           </h2>
           <motion.div

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { markPreloaderDone } from "@/lib/scroll";
 
 export function Preloader() {
   const [complete, setComplete] = useState(false);
@@ -16,7 +17,7 @@ export function Preloader() {
     if (prefersReducedMotion) {
       const id = requestAnimationFrame(() => {
         setComplete(true);
-        window.dispatchEvent(new CustomEvent("noire:preloader-done"));
+        markPreloaderDone();
       });
       return () => cancelAnimationFrame(id);
     }
@@ -31,7 +32,7 @@ export function Preloader() {
       const tl = gsap.timeline({
         onComplete: () => {
           setComplete(true);
-          window.dispatchEvent(new CustomEvent("noire:preloader-done"));
+          markPreloaderDone();
         },
       });
 

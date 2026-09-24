@@ -99,14 +99,14 @@ export function LimitedDrop() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.95, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-5 lg:self-center will-change-transform"
+              className="mx-auto w-full max-w-md lg:col-span-5 lg:max-w-none lg:self-center will-change-transform"
             >
               <div className="group relative aspect-[3/4] w-full overflow-hidden bg-surface-0 shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)]">
                 <Image
                   src="/images/product-vector-shell.png"
                   alt="Proto-Shell Archive 002 — individually numbered proto-garment"
                   fill
-                  sizes="(min-width: 1280px) 408px, (min-width: 1024px) 32vw, 100vw"
+                  sizes="(min-width: 1280px) 408px, (min-width: 1024px) 32vw, (min-width: 480px) 448px, 100vw"
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
                 />
 

@@ -26,6 +26,15 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [menuOpen]);
+
   return (
     <header
       className={`fixed top-0 left-0 z-50 w-full transition-all duration-500 ease-out ${
@@ -45,34 +54,32 @@ export function Header() {
 
         <nav className="hidden lg:flex items-center gap-10">
           {NAV_LINKS.map((link) => (
-            <Link
+            <a
               key={link.label}
               href={link.href}
               className="font-mono font-medium text-[11px] tracking-[1.32px] uppercase text-ink-200 transition-colors duration-200 hover:text-ink-300"
             >
               {link.label}
-            </Link>
+            </a>
           ))}
         </nav>
 
-        <div className="flex items-center gap-4 md:gap-6">
+        <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
           <button className="hidden sm:flex items-center gap-1 font-mono font-medium text-[11px] tracking-[1.32px] uppercase text-ink-200 transition-colors duration-200 hover:text-ink-300">
             <img src="/icons/search.svg" alt="" className="size-[15px]" />
             Search
           </button>
-          <Link
-            href="#account"
-            className="hidden md:flex items-center gap-1 font-mono font-medium text-[11px] tracking-[1.32px] uppercase text-ink-200 transition-colors duration-200 hover:text-ink-300"
-          >
+          <button className="hidden md:flex items-center gap-1 font-mono font-medium text-[11px] tracking-[1.32px] uppercase text-ink-200 transition-colors duration-200 hover:text-ink-300">
             <img src="/icons/account.svg" alt="" className="size-[16.667px]" />
             Account
-          </Link>
+          </button>
           <button
             onClick={openBag}
-            className="hidden sm:flex items-center gap-1 font-mono font-medium text-[11px] tracking-[1.32px] uppercase text-ink-200 transition-colors duration-200 hover:text-ink-300"
+            aria-label={`Open bag, ${itemCount} items`}
+            className="flex min-h-10 items-center gap-1.5 font-mono font-medium text-[11px] tracking-[1.32px] uppercase text-ink-200 transition-colors duration-200 hover:text-ink-300 sm:gap-1"
           >
             <img src="/icons/bag.svg" alt="" className="h-[16.667px] w-[13.333px]" />
-            Bag
+            <span className="hidden sm:inline">Bag</span>
             <span className="min-w-[18px] rounded-full bg-[#c62201] px-1.5 py-0.5 text-center font-mono text-xs text-white tracking-[0.24px]">
               {String(itemCount).padStart(2, "0")}
             </span>
@@ -85,9 +92,10 @@ export function Header() {
           </button>
 
           <button
-            aria-label="Toggle menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
             onClick={() => setMenuOpen((v) => !v)}
-            className="flex lg:hidden flex-col gap-1.5 p-2"
+            className="-mr-2 flex size-10 flex-col items-center justify-center gap-1.5 lg:hidden"
           >
             <span
               className={`block h-px w-5 bg-ink-100 transition-transform duration-200 ${menuOpen ? "translate-y-[3.5px] rotate-45" : ""}`}
@@ -108,17 +116,27 @@ export function Header() {
             transition={{ duration: 0.25, ease: "easeInOut" }}
             className="lg:hidden overflow-hidden border-t border-border-1 bg-surface-0"
           >
-            <div className="flex flex-col gap-5 px-6 py-6">
+            <div className="flex flex-col px-6 py-3 md:px-16">
               {NAV_LINKS.map((link) => (
-                <Link
+                <a
                   key={link.label}
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className="font-mono font-medium text-xs tracking-[1.32px] uppercase text-ink-200 hover:text-ink-300"
+                  className="border-b border-border-1/60 py-4 font-mono font-medium text-xs tracking-[1.32px] uppercase text-ink-200 hover:text-ink-300"
                 >
                   {link.label}
-                </Link>
+                </a>
               ))}
+              <div className="flex items-center gap-6 py-4 md:hidden">
+                <button className="flex items-center gap-1.5 font-mono font-medium text-xs tracking-[1.32px] uppercase text-ink-200 hover:text-ink-300 sm:hidden">
+                  <img src="/icons/search.svg" alt="" className="size-[15px]" />
+                  Search
+                </button>
+                <button className="flex items-center gap-1.5 font-mono font-medium text-xs tracking-[1.32px] uppercase text-ink-200 hover:text-ink-300">
+                  <img src="/icons/account.svg" alt="" className="size-[16.667px]" />
+                  Account
+                </button>
+              </div>
             </div>
           </motion.nav>
         )}

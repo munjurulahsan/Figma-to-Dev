@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 
 export type BagItem = {
   id: string;
@@ -49,7 +49,7 @@ export function BagProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<BagItem[]>(INITIAL_ITEMS);
   const [isOpen, setIsOpen] = useState(false);
 
-  const addItem = (item: AddableBagItem) => {
+  const addItem = useCallback((item: AddableBagItem) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {
@@ -60,11 +60,14 @@ export function BagProvider({ children }: { children: ReactNode }) {
       return [...prev, { ...item, qty: item.qty ?? 1 }];
     });
     setIsOpen(true);
-  };
+  }, []);
 
-  const removeItem = (id: string) => {
+  const removeItem = useCallback((id: string) => {
     setItems((prev) => prev.filter((i) => i.id !== id));
-  };
+  }, []);
+
+  const openBag = useCallback(() => setIsOpen(true), []);
+  const closeBag = useCallback(() => setIsOpen(false), []);
 
   const itemCount = useMemo(() => items.reduce((sum, i) => sum + i.qty, 0), [items]);
   const subtotal = useMemo(() => items.reduce((sum, i) => sum + i.price * i.qty, 0), [items]);
@@ -78,8 +81,8 @@ export function BagProvider({ children }: { children: ReactNode }) {
         subtotal,
         addItem,
         removeItem,
-        openBag: () => setIsOpen(true),
-        closeBag: () => setIsOpen(false),
+        openBag,
+        closeBag,
       }}
     >
       {children}

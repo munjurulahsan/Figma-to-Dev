@@ -23,7 +23,7 @@ export function Newsletter() {
         <span className="pb-2 font-mono text-[11px] uppercase tracking-[1.1px] text-ink-300">
           Confidential Transmissions
         </span>
-        <h2 className="pb-3 font-display font-bold uppercase leading-[60px] tracking-[-1.68px] text-[clamp(2rem,6vw,3.5rem)] text-ink-100">
+        <h2 className="pb-3 font-display font-bold uppercase leading-[1.07] tracking-[-0.03em] text-[clamp(2rem,6vw,3.5rem)] text-ink-100">
           Enter the Future
         </h2>
         <p className="pb-10 font-body text-[15px] leading-6 text-ink-200">

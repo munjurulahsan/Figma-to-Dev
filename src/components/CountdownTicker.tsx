@@ -34,17 +34,17 @@ export function CountdownTicker() {
   ];
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-2 sm:gap-4">
       {units.map((unit, i) => {
         const isLast = i === units.length - 1;
         const padded = String(unit.value).padStart(2, "0");
 
         return (
           <Fragment key={unit.label}>
-            <div className="flex min-w-[88px] shrink-0 flex-col items-center bg-surface-0 px-4 py-4 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.5)] transition-colors duration-300 ease-out hover:bg-surface-3">
+            <div className="flex min-w-[64px] shrink-0 flex-col items-center bg-surface-0 px-2 py-3 sm:min-w-[88px] sm:px-4 sm:py-4 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.5)] transition-colors duration-300 ease-out hover:bg-surface-3">
               <div
                 style={{ perspective: 600 }}
-                className={`relative block h-[42px] w-full overflow-hidden text-center font-display text-[36px] font-bold leading-[42px] tracking-[-0.72px] tabular-nums ${
+                className={`relative block h-[34px] w-full overflow-hidden text-center font-display text-[28px] font-bold leading-[34px] tracking-[-0.72px] sm:h-[42px] sm:text-[36px] sm:leading-[42px] tabular-nums ${
                   isLast ? "text-ink-300" : "text-ink-100"
                 }`}
               >
@@ -72,7 +72,7 @@ export function CountdownTicker() {
             </div>
 
             {!isLast && (
-              <span className="font-display text-[36px] font-bold leading-[42px] tracking-[-0.72px] text-ink-300">
+              <span className="font-display text-[28px] font-bold leading-[34px] tracking-[-0.72px] text-ink-300 sm:text-[36px] sm:leading-[42px]">
                 :
               </span>
             )}

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "setup:assets": "node scripts/setup-assets.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",
@@ -29,5 +30,8 @@
     "eslint-config-next": "16.3.5",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "optionalDependencies": {
+    "@next/swc-darwin-arm64": "^16.3.5"
   }
 }

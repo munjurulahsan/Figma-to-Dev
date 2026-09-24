@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useBag } from "@/context/BagContext";
+import { getLenis } from "@/lib/scroll";
 
 const EASE_CINEMATIC = [0.16, 1, 0.3, 1] as const;
 
@@ -20,11 +21,15 @@ export function BagDrawer() {
       if (e.key === "Escape") closeBag();
     };
     document.addEventListener("keydown", handleKey);
+    // Lenis drives the page scroll itself, so body overflow alone won't hold it.
+    const lenis = getLenis();
+    lenis?.stop();
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", handleKey);
       document.body.style.overflow = previousOverflow;
+      lenis?.start();
     };
   }, [isOpen, closeBag]);
 
@@ -71,7 +76,7 @@ export function BagDrawer() {
             </div>
 
             {/* Items */}
-            <div className="flex-1 overflow-y-auto px-6 sm:px-10">
+            <div data-lenis-prevent className="flex-1 overflow-y-auto overscroll-contain px-6 sm:px-10">
               {items.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center gap-2 py-20 text-center">
                   <p className="font-mono text-xs uppercase tracking-[1.1px] text-ink-200">

@@ -87,7 +87,7 @@ export function ProductShowcase() {
   const { addItem } = useBag();
 
   const sectionRef = useRef<HTMLElement>(null);
-  const magneticButtonRef = useRef<HTMLButtonElement>(null);
+  const magneticRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
   const interactive = !prefersReducedMotion;
 
@@ -107,10 +107,14 @@ export function ProductShowcase() {
 
     gsap.registerPlugin(ScrollTrigger);
 
+    const section = sectionRef.current;
     const mm = gsap.matchMedia();
     mm.add("(min-width: 1024px)", () => {
+      // Only pin when the whole section fits below the header — otherwise the
+      // configurator's CTA would sit off-screen for the length of the pin.
+      if (section.offsetHeight > window.innerHeight - 80) return;
       ScrollTrigger.create({
-        trigger: sectionRef.current,
+        trigger: section,
         start: "top 80px",
         end: "+=480",
         pin: true,
@@ -124,7 +128,7 @@ export function ProductShowcase() {
 
   // Magnetic button physics for "ADD SPECIMEN TO BAG"
   useEffect(() => {
-    const btn = magneticButtonRef.current;
+    const btn = magneticRef.current;
     if (!btn || !interactive) return;
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
@@ -180,7 +184,7 @@ export function ProductShowcase() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
         variants={headerGroup}
-        className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end"
+        className="flex flex-col items-start justify-between gap-4 lg:flex-row lg:items-end"
       >
         <div className="flex flex-col gap-2">
           <motion.div variants={headerItem} className="flex items-center gap-2">
@@ -191,12 +195,12 @@ export function ProductShowcase() {
           </motion.div>
           <motion.h2
             variants={headerItem}
-            className="font-display font-bold uppercase leading-[60px] tracking-[-1.68px] text-[clamp(2.25rem,6vw,3.5rem)] text-ink-100"
+            className="font-display font-bold uppercase leading-[1.07] tracking-[-0.03em] text-[clamp(2.25rem,6vw,3.5rem)] text-ink-100"
           >
             Aero Form 01
           </motion.h2>
         </div>
-        <motion.div variants={headerItem} className="flex items-center gap-4">
+        <motion.div variants={headerItem} className="flex flex-wrap items-center gap-x-4 gap-y-2 whitespace-nowrap">
           <span className="font-mono text-xs tracking-[0.24px] text-ink-200">
             ROTATION DEGREE: <span className="font-medium text-ink-300">{String(degrees).padStart(3, "0")}°</span>
           </span>
@@ -217,7 +221,7 @@ export function ProductShowcase() {
         <motion.div
           ref={stageRef}
           variants={stageReveal}
-          className="relative col-span-1 flex h-[420px] items-center justify-center overflow-hidden p-4 sm:h-[520px] lg:col-span-8 lg:h-[640px]"
+          className="relative col-span-1 flex h-[420px] items-center justify-center overflow-hidden p-4 sm:h-[520px] lg:col-span-7 lg:h-[640px] xl:col-span-8"
         >
           {/* Scroll-linked parallax wrapper — visuals only, independent of the turntable's own drag/rotation state. */}
           <motion.div style={{ scale: stageScale, y: stageY }} className="absolute inset-0">
@@ -247,20 +251,20 @@ export function ProductShowcase() {
         {/* Configurator */}
         <motion.div
           variants={panelReveal}
-          className="col-span-1 flex flex-col justify-between gap-10 bg-surface-2 p-6 sm:p-10 lg:col-span-4"
+          className="col-span-1 flex flex-col justify-between gap-10 bg-surface-2 p-6 sm:p-10 lg:col-span-5 lg:p-8 xl:col-span-4 xl:p-10"
         >
           <div className="flex flex-col gap-2">
-            <motion.div variants={panelItem} className="flex items-center justify-between">
+            <motion.div variants={panelItem} className="flex items-center justify-between gap-3">
               <span className="font-mono font-medium text-[11px] uppercase tracking-[0.55px] text-ink-200">
                 Footwear Artifact
               </span>
-              <span className="bg-surface-3 px-2 py-0.5 font-mono text-xs tracking-[0.24px] text-ink-300">
+              <span className="shrink-0 bg-surface-3 px-2 py-0.5 font-mono text-xs tracking-[0.24px] text-ink-300">
                 ED. 120 PAIRS
               </span>
             </motion.div>
             <motion.h3
               variants={panelItem}
-              className="font-display font-semibold uppercase leading-[42px] tracking-[-0.72px] text-4xl text-ink-100"
+              className="font-display font-semibold uppercase leading-[1.15] tracking-[-0.72px] text-[clamp(1.75rem,5vw,2.25rem)] text-ink-100"
             >
               Aero Form 01
             </motion.h3>
@@ -279,11 +283,11 @@ export function ProductShowcase() {
             </motion.p>
 
             <motion.div variants={panelItem} className="flex flex-col gap-2 pt-4">
-              <div className="flex items-center justify-between">
-                <span className="font-mono font-medium text-[11px] uppercase tracking-[1.32px] text-ink-200">
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="shrink-0 font-mono font-medium text-[11px] uppercase tracking-[1.32px] text-ink-200">
                   Finish
                 </span>
-                <span className="font-mono font-medium text-[11px] uppercase tracking-[1.32px] text-ink-100">
+                <span className="text-right font-mono font-medium text-[11px] uppercase tracking-[1.32px] text-ink-100">
                   {FINISHES[selectedFinish].name}
                 </span>
               </div>
@@ -354,17 +358,19 @@ export function ProductShowcase() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <motion.button
-              ref={magneticButtonRef}
-              variants={panelItem}
-              onClick={handleAddToBag}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="flex items-center justify-center gap-3 bg-ink-100 py-4 font-mono font-medium text-[11px] uppercase tracking-[1.1px] text-surface-0 transition-shadow duration-200 ease-out hover:shadow-[0_12px_28px_-8px_rgba(255,255,255,0.3)] will-change-transform"
-            >
-              <img src="/icons/bag-outline.svg" alt="" className="h-[15px] w-3" />
-              Add Specimen to Bag
-            </motion.button>
+            {/* GSAP drives the magnetic pull on this wrapper; Framer animates the button inside. */}
+            <div ref={magneticRef} className="will-change-transform">
+              <motion.button
+                variants={panelItem}
+                onClick={handleAddToBag}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex w-full items-center justify-center gap-3 bg-ink-100 py-4 font-mono font-medium text-[11px] uppercase tracking-[1.1px] text-surface-0 transition-shadow duration-200 ease-out hover:shadow-[0_12px_28px_-8px_rgba(255,255,255,0.3)]"
+              >
+                <img src="/icons/bag-outline.svg" alt="" className="h-[15px] w-3" />
+                Add Specimen to Bag
+              </motion.button>
+            </div>
             <motion.div variants={panelItem} className="flex items-center justify-between px-1 py-2">
               <span className="font-mono text-[11px] leading-6 text-ink-200">
                 AUTHENTICITY CHIP

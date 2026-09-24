@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -48,10 +48,11 @@ function StatCard({ stat, index }: { stat: StatConfig; index: number }) {
   const [displayValue, setDisplayValue] = useState(stat.isNumeric ? "0" + (stat.suffix || "") : stat.value);
   const cardRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     const card = cardRef.current;
-    if (!card) return;
+    if (!card || reduce) return;
 
     gsap.registerPlugin(ScrollTrigger);
 
@@ -102,7 +103,7 @@ function StatCard({ stat, index }: { stat: StatConfig; index: number }) {
         tween.kill();
       };
     }
-  }, [stat, index]);
+  }, [stat, index, reduce]);
 
   return (
     <div
@@ -113,7 +114,7 @@ function StatCard({ stat, index }: { stat: StatConfig; index: number }) {
         ref={textRef}
         className="font-display text-3xl font-bold tracking-[-0.72px] text-ink-300 tabular-nums transition-colors duration-200 group-hover:text-accent"
       >
-        {displayValue}
+        {reduce ? stat.value : displayValue}
       </span>
       <span className="pt-1.5 font-mono text-[10px] uppercase tracking-[0.8px] text-ink-200">
         {stat.label}
@@ -140,7 +141,7 @@ export function EditorialStory() {
         <span className="pb-4 font-mono text-[11px] uppercase tracking-[3.3px] text-ink-300">
           Philosophical Codex
         </span>
-        <h2 className="max-w-2xl font-display text-[clamp(2rem,6vw,3.5rem)] font-bold uppercase leading-[60px] tracking-[-1.68px] text-ink-100">
+        <h2 className="max-w-2xl text-balance font-display text-[clamp(2rem,6vw,3.5rem)] font-bold uppercase leading-[1.07] tracking-[-0.03em] text-ink-100">
           Built for What Comes Next
         </h2>
         {/* Underline reveal line */}

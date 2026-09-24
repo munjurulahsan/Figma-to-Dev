@@ -89,7 +89,10 @@ function PillarCard({ pillar, index }: { pillar: Pillar; index: number }) {
   const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0.6]);
 
   return (
-    <RevealOnScroll delay={index * 0.15} className={pillar.offset}>
+    <RevealOnScroll
+      delay={index * 0.15}
+      className={`${pillar.offset} ${index === 2 ? "md:col-span-2 md:mx-auto md:w-[calc(50%-20px)] lg:col-span-1 lg:w-auto" : ""}`}
+    >
       <motion.article
         ref={cardRef}
         style={{ y: cardY, opacity }}
@@ -172,7 +175,7 @@ export function CollectionIntro() {
     >
       <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-16 px-6 py-20 md:px-16 md:py-24">
         {/* Header row — node 1:112 (264 / 560 / 264, gap-32, items-end) */}
-        <RevealOnScroll className="flex flex-col gap-8 lg:grid lg:grid-cols-[264fr_560fr_264fr] lg:items-end lg:gap-8">
+        <RevealOnScroll className="flex flex-col gap-8 lg:grid lg:grid-cols-[1fr_2fr] lg:items-end xl:grid-cols-[264fr_560fr_264fr] xl:gap-8">
           {/* Container — node 1:113 (w-264, gap-8) */}
           <motion.div style={{ x: headingX }} className="flex flex-col gap-2">
             {/* Container — node 1:114 (gap-8) */}
@@ -210,9 +213,9 @@ export function CollectionIntro() {
           </p>
 
           {/* Container — node 1:124 (w-264, items-start justify-end) */}
-          <div className="flex lg:justify-end">
+          <div className="flex lg:col-span-2 xl:col-span-1 xl:justify-end">
             {/* Background — node 1:125 (bg #201f1f, p-16, gap-8) */}
-            <div className="flex w-full flex-col gap-2 bg-surface-3 p-4 transition-colors duration-300 ease-out hover:bg-surface-4 lg:w-auto">
+            <div className="flex w-full flex-col gap-2 bg-surface-3 p-4 transition-colors duration-300 ease-out hover:bg-surface-4 sm:w-auto">
               <span className="font-mono text-[11px] font-medium uppercase leading-[14px] tracking-[1.32px] text-ink-200">
                 Curatorial Core
               </span>

@@ -3,31 +3,27 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
-import pillarForm from "../../public/images/pillar-form.png";
-import pillarMotion from "../../public/images/pillar-motion.png";
-import pillarStructure from "../../public/images/pillar-structure.png";
-
 const ARTICLES = [
   {
     date: "October 14, 2025",
     title: ["The Architecture of", "Silent Form"],
     excerpt: "Deconstructing the psychological weight of sculptural clothing in high-density urban environments.",
     tag: "ESSAY // 04 MIN READ",
-    image: pillarForm,
+    image: "/images/pillar-form.png",
   },
   {
     date: "November 02, 2025",
     title: ["Beyond the Silhouette"],
     excerpt: "How aerodynamic automotive wind-tunnels shaped the contour parameters of the Aero Form 01 chassis.",
     tag: "TECHNICAL // 07 MIN READ",
-    image: pillarMotion,
+    image: "/images/pillar-motion.png",
   },
   {
     date: "December 19, 2025",
     title: ["A New Material", "Language"],
     excerpt: "A dialogue with our metallurgy partner on annealing titanium closures for tactile permanence.",
     tag: "DIALOGUE // 05 MIN READ",
-    image: pillarStructure,
+    image: "/images/pillar-structure.png",
   },
 ];
 
@@ -38,12 +34,12 @@ export function EditorialJournal() {
       data-name="Section - CHAPTER 10: EDITORIAL JOURNAL"
       className="flex flex-col gap-16 bg-surface-0 px-6 py-20 md:px-16 md:py-24"
     >
-      <RevealOnScroll className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <RevealOnScroll className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div className="flex flex-col gap-1">
           <span className="font-mono text-[11px] uppercase tracking-[1.1px] text-ink-300">
             Monograph Dispatches
           </span>
-          <h2 className="font-display text-[clamp(2.25rem,6vw,3.5rem)] font-bold uppercase leading-[60px] tracking-[-1.68px] text-ink-100">
+          <h2 className="font-display text-[clamp(2.25rem,6vw,3.5rem)] font-bold uppercase leading-[1.07] tracking-[-0.03em] text-ink-100">
             The Editorial Journal
           </h2>
           {/* Heading Underline Reveal */}
@@ -55,21 +51,24 @@ export function EditorialJournal() {
             className="mt-2 h-0.5 w-24 origin-left bg-gradient-to-r from-accent to-ink-300"
           />
         </div>
-        <span className="font-mono text-xs tracking-[0.24px] text-ink-200">
+        <span className="shrink-0 font-mono text-xs tracking-[0.24px] text-ink-200">
           Curated by Atelier NOIRÉ
         </span>
       </RevealOnScroll>
 
       <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
         {ARTICLES.map((article, i) => (
-          <RevealOnScroll key={article.tag} delay={i * 0.15}>
+          <RevealOnScroll
+            key={article.tag}
+            delay={i * 0.15}
+            className={i === 2 ? "sm:col-span-2 sm:mx-auto sm:w-[calc(50%-20px)] lg:col-span-1 lg:w-auto" : undefined}
+          >
             <article className="group flex flex-col transition-all duration-300">
               <div className="relative mb-4 aspect-[352/227] w-full overflow-hidden bg-surface-deep shadow-[0_12px_24px_-8px_rgba(0,0,0,0.4)]">
                 <Image
                   src={article.image}
                   alt={article.title.join(" ")}
                   fill
-                  placeholder="blur"
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   className="object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.08] will-change-transform"
                 />

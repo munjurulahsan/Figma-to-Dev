@@ -38,6 +38,11 @@
   --font-body: var(--font-body);
 }
 
+html {
+  /* Anchor targets land below the fixed 80px header (Lenis reads this too). */
+  scroll-padding-top: 80px;
+}
+
 body {
   background: var(--color-surface-1);
   color: var(--color-ink-100);

@@ -1,6 +1,7 @@
 export function AtelierCodex() {
   return (
     <section
+      id="atelier"
       data-name="Section - CHAPTER 12: MONUMENTAL ATELIER CODEX (SUPPLEMENT TO FOOTER)"
       className="flex flex-col gap-10 overflow-hidden bg-surface-deep px-6 pb-6 pt-12 md:gap-16 md:px-16 md:pt-16"
     >
@@ -11,7 +12,7 @@ export function AtelierCodex() {
         NOIRÉ
       </span>
 
-      <div className="grid grid-cols-1 gap-8 pb-6 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 pb-6 sm:grid-cols-2 sm:gap-8 md:grid-cols-3">
         <div className="flex flex-col gap-1">
           <span className="font-mono font-bold text-xs tracking-[0.24px] text-ink-100">
             ATELIER LOCATION
@@ -31,7 +32,7 @@ export function AtelierCodex() {
             ARCHIVE DATABASE.
           </span>
         </div>
-        <div className="flex flex-col gap-1 sm:items-end sm:text-right">
+        <div className="flex flex-col gap-1 md:items-end md:text-right">
           <span className="font-mono font-bold text-xs tracking-[0.24px] text-ink-100">
             DIGITAL FLAGSHIP
           </span>

@@ -69,12 +69,14 @@ export default function ProductTurntable({
     dragging.current = false;
   };
 
+  // pan-y: horizontal drags rotate, vertical swipes still scroll the page on touch.
   return (
     <div
-      className="absolute inset-0 cursor-grab touch-none active:cursor-grabbing"
+      className="absolute inset-0 cursor-grab touch-pan-y active:cursor-grabbing"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
       onPointerLeave={handlePointerUp}
     >
       <Canvas
